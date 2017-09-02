@@ -419,6 +419,9 @@ public:
     */
     static bool isUnencrypted(const std::string& aFilename);
 
+    void walCheckpoint(const char *zDb, int eMode, int *pnLog, int *pnCkpt);
+    void walCommitHook(int (*apFunc)(void *, sqlite3 *, const char *, int), void *apApp);
+
 private:
     /// @{ Database must be non-copyable
     Database(const Database&);

@@ -289,4 +289,17 @@ bool Database::isUnencrypted(const std::string& aFilename)
     throw exception;
 }
 
+// Shortcut to checkpoint a database with WAL journalling mode enabled
+void Database::walCheckpoint(const char *zDb, int eMode, int *pnLog, int *pnCkpt)
+{
+    const int ret = sqlite3_wal_checkpoint_v2(mpSQLite, zDb, eMode, pnLog, pnCkpt);
+    check(ret);
+}
+
+// Shortcut to register a WAL commit hook to a database with WAL journalling mode enabled
+void Database::walCommitHook(int (*apFunc)(void *, sqlite3 *, const char *, int), void *apApp)
+{
+    sqlite3_wal_hook(mpSQLite, apFunc, apApp);
+}
+
 }  // namespace SQLite
